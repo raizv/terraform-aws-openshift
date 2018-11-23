@@ -1,4 +1,3 @@
-//  Define the VPC.
 resource "aws_vpc" "openshift" {
   cidr_block           = "${var.vpc_cidr}"
   enable_dns_hostnames = true
@@ -9,7 +8,6 @@ resource "aws_vpc" "openshift" {
   }
 }
 
-//  Create an Internet Gateway for the VPC.
 resource "aws_internet_gateway" "openshift" {
   vpc_id = "${aws_vpc.openshift.id}"
 
@@ -19,11 +17,10 @@ resource "aws_internet_gateway" "openshift" {
   }
 }
 
-//  Create a public subnet.
 resource "aws_subnet" "public-subnet" {
   vpc_id                  = "${aws_vpc.openshift.id}"
   cidr_block              = "${var.subnet_cidr}"
-  availability_zone       = "${lookup(var.subnetaz, var.region)}"
+  availability_zone       = "${lookup(var.subnetaz[count.index], "az")}"
   map_public_ip_on_launch = true
   depends_on              = ["aws_internet_gateway.openshift"]
 
@@ -33,7 +30,6 @@ resource "aws_subnet" "public-subnet" {
   }
 }
 
-//  Create a route table allowing all addresses access to the IGW.
 resource "aws_route_table" "public" {
   vpc_id = "${aws_vpc.openshift.id}"
 

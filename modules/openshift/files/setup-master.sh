@@ -39,8 +39,12 @@ chkconfig awslogs on
 # See: https://docs.openshift.org/latest/install_config/install/host_preparation.html
 
 # Install packages required to setup OpenShift.
-yum install -y wget git net-tools bind-utils iptables-services bridge-utils bash-completion httpd-tools
+yum install -y wget git net-tools bind-utils iptables-services bridge-utils bash-completion httpd-tools NetworkManager
 yum update -y
+
+systemctl enable NetworkManager
+systemctl start NetworkManager
+
 # Noticed that RHEL was being upgraded to 7.5
 # Following could be used to stop that.
 # yum -exclude=kernel* update -y
@@ -68,6 +72,6 @@ systemctl stop docker
 rm -rf /var/lib/docker/*
 systemctl restart docker
 
-# Allow the ec2-user to sudo without a tty, which is required when we run post
+# Allow the centos to sudo without a tty, which is required when we run post
 # install scripts on the server.
-echo Defaults:ec2-user \!requiretty >> /etc/sudoers
+echo Defaults:centos \!requiretty >> /etc/sudoers

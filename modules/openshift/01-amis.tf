@@ -1,5 +1,23 @@
-# Define the RHEL 7.2 AMI by:
-# RedHat, Latest, x86_64, EBS, HVM, RHEL 7.2
+data "aws_ami" "centos_7" {
+  owners      = ["679593333241"]
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["CentOS Linux 7 x86_64 HVM EBS *"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+}
+
 data "aws_ami" "rhel7_2" {
   most_recent = true
 
@@ -50,5 +68,20 @@ data "aws_ami" "amazonlinux" {
   filter {
     name   = "name"
     values = ["amzn-ami-hvm-*"]
+  }
+}
+
+data "aws_ami" "ubuntu" {
+most_recent = true
+owners = ["099720109477"] # Canonical
+
+  filter {
+      name   = "name"
+      values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
+  }
+
+  filter {
+      name   = "virtualization-type"
+      values = ["hvm"]
   }
 }
